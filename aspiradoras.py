@@ -1,6 +1,8 @@
 import random
 import time
 from termcolor import colored
+from IPython.display import clear_output, display_html
+
 
 # Definimos una clase para dirigir el comportamiento de cada aspiradora
 class VacuumCleaner:
@@ -26,6 +28,8 @@ class VacuumCleaner:
         if vacuumWorld[self.y][self.x][0] == '⚫':
             print(colored('ASPIRA', 'cyan'))
             vacuumWorld[self.y][self.x][0] = '   '
+            global celdasAspiradas
+            celdasAspiradas = celdasAspiradas + 1
     
     def limpiar(self):
         time.sleep(1)
@@ -47,108 +51,112 @@ class VacuumCleaner:
         #ARRIBA
         if(eleccion == 1 and (self.y-1 >= 0)):
             if((vacuumWorld[self.y-1][self.x] == ['⚫'] or vacuumWorld[self.y-1][self.x] == ['   ']) and self.mapLearning[self.y-1][self.x] == [' ']):
-                vacuumWorld[self.y][self.x].pop(1)
+                vacuumWorld[self.y][self.x].pop(vacuumWorld[self.y][self.x].index(self.name))
                 vacuumWorld[self.y-1][self.x].append(self.name)
                 self.mapLearning[self.y-1][self.x] = ['-']
                 #print("ARRIBA")
                 self.y = self.y-1
                 self.cost = self.cost + 1
-                #self.limpiar()
+                #self.aspirar()
         
         eleccion = eleccion + 1
         
         #ABAJO
         if(eleccion == 2 and (self.y+1 < self.m)):
              if((vacuumWorld[self.y+1][self.x] == ['⚫'] or vacuumWorld[self.y+1][self.x] == ['   ']) and self.mapLearning[self.y+1][self.x] == [' ']):
-                vacuumWorld[self.y][self.x].pop(1)
+                vacuumWorld[self.y][self.x].pop(vacuumWorld[self.y][self.x].index(self.name))
                 vacuumWorld[self.y+1][self.x].append(self.name)
                 self.mapLearning[self.y+1][self.x]= ['-']
                 #print("ABAJO")
                 self.y = self.y+1
                 self.cost = self.cost + 1
-                #self.limpiar()
+                #self.aspirar()
         
         eleccion = eleccion + 1
 
         #DERECHA
         if(eleccion == 3 and (self.x+1 < self.n)):
             if((vacuumWorld[self.y][self.x+1] == ['⚫'] or vacuumWorld[self.y][self.x+1] == ['   ']) and self.mapLearning[self.y][self.x+1] == [' ']):
-                vacuumWorld[self.y][self.x].pop(1)
+                vacuumWorld[self.y][self.x].pop(vacuumWorld[self.y][self.x].index(self.name))
                 vacuumWorld[self.y][self.x+1].append(self.name)
                 self.mapLearning[self.y][self.x+1] = ['-']
                 #print("DERECHA")
                 self.x = self.x+1
                 self.cost = self.cost + 1
-                #self.limpiar()
+                #self.aspirar()
+        
         
         eleccion = eleccion + 1
         
         #IZQUIERDA
         if(eleccion == 4 and (self.x-1 >= 0)):
             if((vacuumWorld[self.y][self.x-1] == ['⚫'] or vacuumWorld[self.y][self.x-1] == ['   ']) and self.mapLearning[self.y][self.x-1] == [' ']):
-                vacuumWorld[self.y][self.x].pop(1)
+                vacuumWorld[self.y][self.x].pop(vacuumWorld[self.y][self.x].index(self.name))
                 vacuumWorld[self.y][self.x-1].append(self.name)
                 self.mapLearning[self.y][self.x-1] = ['-']
                 #print("IZQUIERDA")
                 self.x = self.x-1
                 self.cost = self.cost + 1
-                #self.limpiar()
+                #self.aspirar()
 
+        
         eleccion = eleccion + 1
         
         #SUPDER
         if(eleccion == 5 and self.x+1 < self.n and self.y-1 >= 0):
             if((vacuumWorld[self.y-1][self.x+1] == ['⚫'] or vacuumWorld[self.y-1][self.x+1] == ['   ']) and self.mapLearning[self.y-1][self.x+1] == [' ']):
-                vacuumWorld[self.y][self.x].pop(1)
+                vacuumWorld[self.y][self.x].pop(vacuumWorld[self.y][self.x].index(self.name))
                 vacuumWorld[self.y-1][self.x+1].append(self.name)
                 self.mapLearning[self.y-1][self.x+1] = ['-']
                 #print("SUPERIOR DERECHA")
                 self.x = self.x+1
                 self.y = self.y-1
                 self.cost = self.cost + 1
-                #self.limpiar()
+                #self.aspirar()
 
+        
         eleccion = eleccion + 1
         
         #SUPIZQ
         if(eleccion == 6 and (self.x-1 >= 0) and self.y-1 >= 0):
             if((vacuumWorld[self.y-1][self.x-1] == ['⚫'] or vacuumWorld[self.y-1][self.x-1] == ['   ']) and self.mapLearning[self.y-1][self.x-1] == [' ']):
-                vacuumWorld[self.y][self.x].pop(1)
+                vacuumWorld[self.y][self.x].pop(vacuumWorld[self.y][self.x].index(self.name))
                 vacuumWorld[self.y-1][self.x-1].append(self.name)
                 self.mapLearning[self.y-1][self.x-1] = ['-']
                 #print("SUPERIOR IZQUIERDA")
                 self.x = self.x-1
                 self.y = self.y-1
                 self.cost = self.cost + 1
-                #self.limpiar()
+                #self.aspirar()
 
         eleccion = eleccion + 1
         
         #INFDER
         if(eleccion == 7 and (self.x+1 < self.n) and self.y+1 < self.m):
             if((vacuumWorld[self.y+1][self.x+1] == ['⚫'] or vacuumWorld[self.y+1][self.x+1] == ['   ']) and self.mapLearning[self.y+1][self.x+1] == [' ']):
-                vacuumWorld[self.y][self.x].pop(1)
+                vacuumWorld[self.y][self.x].pop(vacuumWorld[self.y][self.x].index(self.name))
                 vacuumWorld[self.y+1][self.x+1].append(self.name)
                 self.mapLearning[self.y+1][self.x+1] = ['-']
                 #print("INFERIOR DERECHA")
                 self.x = self.x+1
                 self.y = self.y+1
                 self.cost = self.cost + 1
-                #self.limpiar()
+                #self.aspirar()
 
+        
         eleccion = eleccion + 1
         
         #INFIZQ
         if(eleccion == 8 and (self.x-1 >= 0 and self.y+1 < self.m)):
             if((vacuumWorld[self.y+1][self.x-1] == ['⚫'] or vacuumWorld[self.y+1][self.x-1] == ['   ']) and self.mapLearning[self.y+1][self.x-1] == [' ']):
-                vacuumWorld[self.y][self.x].pop(1)
+                vacuumWorld[self.y][self.x].pop(vacuumWorld[self.y][self.x].index(self.name))
                 vacuumWorld[self.y+1][self.x-1].append(self.name)
                 self.mapLearning[self.y+1][self.x-1] = ['-']
                 #print("INFERIOR IZQUIERDA")
                 self.x = self.x-1
                 self.y = self.y+1
                 self.cost = self.cost + 1
-                #self.limpiar()
+                #self.aspirar()
 
 # Definimos las habitaciones que indica el usuario (n x m)
 m = int(input("Ingrese m: "))
@@ -161,6 +169,7 @@ contCeldasSucias = 0
 vacuumWorld = []
 aux = []
 lista = []
+celdasAspiradas = 0
 
 for a in range(celdasSucias):
     lista.append(['⚫'])
@@ -187,16 +196,21 @@ print("Mundo inicial: ")
 imprimeHabitaciones()
 
 aspiradoras = []
+mostrarContador = []
 
 for h in range(numAspiradoras):
     name = "A" + str(h+1)
     aspiradoras.append(VacuumCleaner(name, m, n))
+    mostrarContador.append(0)
 
 inicio = time.time()
+current = time.time()
 
-for z in range(100):
+while current - inicio <= tiempo or celdasAspiradas == celdasSucias:
     current = time.time()
-    if current - inicio <= tiempo:
-        print("TIEMPO", tiempo)
-        for w in range(numAspiradoras):
-            aspiradoras[w].limpiar()
+    for w in range(numAspiradoras):
+        aspiradoras[w].limpiar()
+        mostrarContador[w] = int(aspiradoras[w].cost)
+        print("Desempeño: ", mostrarContador)
+
+print("Tiempo de ejecución:", (current-inicio))
